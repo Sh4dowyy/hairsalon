@@ -23,25 +23,25 @@ export function MobileNav() {
       </div>
       <nav className="flex flex-col space-y-4 mt-8">
         <Link href="/" className="text-lg font-medium transition-colors hover:text-primary">
-          Главная
+          Avaleht
         </Link>
         <Link href="/services" className="text-lg font-medium transition-colors hover:text-primary">
-          Услуги
+          Teenused
         </Link>
         <Link href="/booking" className="text-lg font-medium transition-colors hover:text-primary">
-          Запись
+          Broneerimine
         </Link>
         <Link href="/gallery" className="text-lg font-medium transition-colors hover:text-primary">
-          Галерея
+          Galerii
         </Link>
         <Link href="/about" className="text-lg font-medium transition-colors hover:text-primary">
-          О салоне
+          Meist
         </Link>
         <Link href="/reviews" className="text-lg font-medium transition-colors hover:text-primary">
-          Отзывы
+          Arvustused
         </Link>
         <Link href="/contact" className="text-lg font-medium transition-colors hover:text-primary">
-          Контакты
+          Kontakt
         </Link>
         {isEmployee && (
           <Link
@@ -49,7 +49,7 @@ export function MobileNav() {
             className="text-lg font-medium transition-colors hover:text-primary flex items-center"
           >
             <ShieldAlert className="mr-2 h-5 w-5" />
-            Панель сотрудника
+            Töötaja paneel
           </Link>
         )}
       </nav>
@@ -59,7 +59,7 @@ export function MobileNav() {
           <span>+7 (123) 456-78-90</span>
         </div>
         <Button asChild className="w-full">
-          <Link href="/booking">Записаться онлайн</Link>
+          <Link href="/booking">Broneeri online</Link>
         </Button>
       </div>
     </div>

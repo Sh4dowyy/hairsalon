@@ -21,7 +21,7 @@ export function ServicePreview({ title, description, icon, href }: ServicePrevie
       </CardContent>
       <CardFooter className="p-6 pt-0">
         <Link href={href} className="inline-flex items-center text-primary hover:underline">
-          Подробнее
+            Rohkem infot
           <ChevronRight className="ml-1 h-4 w-4" />
         </Link>
       </CardFooter>
