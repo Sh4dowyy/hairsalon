@@ -11,7 +11,7 @@ export function SiteFooter() {
               <span className="text-xl font-bold">Beauty Style</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Салон красоты, где каждый клиент получает индивидуальный подход и высококачественные услуги.
+              Ilusalong, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-muted-foreground hover:text-primary">
@@ -29,59 +29,53 @@ export function SiteFooter() {
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-base font-medium">Навигация</h3>
+            <h3 className="text-base font-medium">Navigeerimine</h3>
             <nav className="flex flex-col space-y-2 text-sm">
               <Link href="/" className="text-muted-foreground hover:text-primary">
-                Главная
+                Avaleht
               </Link>
               <Link href="/services" className="text-muted-foreground hover:text-primary">
-                Услуги
+                Teenused
               </Link>
               <Link href="/booking" className="text-muted-foreground hover:text-primary">
-                Запись
+                Broneerimine
               </Link>
               <Link href="/gallery" className="text-muted-foreground hover:text-primary">
-                Галерея
+                Galerii
               </Link>
             </nav>
           </div>
           <div className="space-y-4">
-            <h3 className="text-base font-medium">Информация</h3>
+            <h3 className="text-base font-medium">Info</h3>
             <nav className="flex flex-col space-y-2 text-sm">
               <Link href="/about" className="text-muted-foreground hover:text-primary">
-                О салоне
-              </Link>
-              <Link href="/reviews" className="text-muted-foreground hover:text-primary">
-                Отзывы
+                Meist
               </Link>
               <Link href="/contact" className="text-muted-foreground hover:text-primary">
-                Контакты
-              </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
-                Политика конфиденциальности
+                Kontakt
               </Link>
             </nav>
           </div>
           <div className="space-y-4">
-            <h3 className="text-base font-medium">Контакты</h3>
+            <h3 className="text-base font-medium">Kontakt</h3>
             <div className="flex flex-col space-y-2 text-sm">
               <div className="flex items-center text-muted-foreground">
                 <MapPin className="h-4 w-4 mr-2" />
-                <span>г. Москва, ул. Примерная, д. 123</span>
+                <span>Tartu Puistee 128</span>
               </div>
               <div className="flex items-center text-muted-foreground">
                 <Phone className="h-4 w-4 mr-2" />
-                <span>+7 (123) 456-78-90</span>
+                <span>+372 5821 2260</span>
               </div>
               <div className="flex items-center text-muted-foreground">
                 <Mail className="h-4 w-4 mr-2" />
-                <span>info@beautystyle.ru</span>
+                <span>nakrisstuudio@gmail.com</span>
               </div>
             </div>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Beauty Style. Все права защищены.</p>
+          <p>© {new Date().getFullYear()} Nakris Studio. Kõik õigused kaitstud.</p>
         </div>
       </div>
     </footer>

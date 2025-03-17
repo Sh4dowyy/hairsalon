@@ -6,38 +6,38 @@ export default function AboutPage() {
   const stylists = [
     {
       id: 1,
-      name: "Анна Иванова",
-      position: "Стилист-колорист",
-      experience: "8 лет",
+      name: "Anna Ivanova",
+      position: "Juuksur-kolorist",
+      experience: "8 aastat",
       description:
-        "Специалист по сложным техникам окрашивания. Постоянно совершенствует свои навыки на международных мастер-классах.",
+        "Spetsialist keerulistes värvitehnikates. Täiendab pidevalt oma oskusi rahvusvahelistel koolitustel.",
       image: "/placeholder.svg?height=400&width=400",
     },
     {
       id: 2,
-      name: "Мария Петрова",
-      position: "Стилист-парикмахер",
-      experience: "6 лет",
+      name: "Maria Petrova",
+      position: "Juuksur-stilist",
+      experience: "6 aastat",
       description:
-        "Мастер женских и мужских стрижек. Создает индивидуальный образ, учитывая особенности внешности и пожелания клиента.",
+        "Naiste ja meeste lõikuste meister. Loob individuaalse välimuse, arvestades kliendi soove ja välimuse eripära.",
       image: "/placeholder.svg?height=400&width=400",
     },
     {
       id: 3,
-      name: "Елена Сидорова",
-      position: "Мастер-универсал",
-      experience: "10 лет",
+      name: "Elena Sidorova",
+      position: "Universaalne meister",
+      experience: "10 aastat",
       description:
-        "Опытный мастер, владеющий всеми техниками стрижки, окрашивания и укладки. Специализируется на создании свадебных причесок.",
+        "Kogenud meister, kes valdab kõiki lõikuse, värvimise ja soengu tegemise tehnikaid. Spetsialiseerub pruudisoengutel.",
       image: "/placeholder.svg?height=400&width=400",
     },
     {
       id: 4,
-      name: "Александр Козлов",
-      position: "Барбер",
-      experience: "5 лет",
+      name: "Alexander Kozlov",
+      position: "Meestejuuksur",
+      experience: "5 aastat",
       description:
-        "Специалист по мужским стрижкам и оформлению бороды. Владеет классическими и современными техниками.",
+        "Spetsialist meeste lõikustes ja habemehoolduses. Valdab klassikalisi ja kaasaegseid tehnikaid.",
       image: "/placeholder.svg?height=400&width=400",
     },
   ]
@@ -49,21 +49,19 @@ export default function AboutPage() {
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">О нашем салоне</h1>
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Meist</h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Салон красоты Beauty Style — это место, где каждый клиент получает индивидуальный подход и
-                  высококачественные услуги.
+                  Ilusalong Nakris Studio on koht, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
                 </p>
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground">
-                  Наш салон был основан в 2015 году и за это время завоевал доверие и любовь многих клиентов. Мы
-                  постоянно совершенствуем свои навыки, следим за последними тенденциями в мире красоты и используем
-                  только профессиональную косметику ведущих мировых брендов.
+                  Meie salong asutati 2025. aastal ja selle aja jooksul oleme võitnud paljude klientide usalduse ja armastuse. 
+                  Täiendame pidevalt oma oskusi, jälgime ilu maailma viimaseid trende ja kasutame ainult juhtivate maailmabrändide professionaalset kosmeetikat.
                 </p>
                 <p className="text-muted-foreground">
-                  Наша миссия — помочь каждому клиенту подчеркнуть свою индивидуальность и создать неповторимый образ,
-                  который будет отражать его внутренний мир и стиль жизни.
+                  Meie missioon on aidata igal kliendil rõhutada oma individuaalsust ja luua kordumatu välimus, 
+                  mis peegeldab tema sisemaailma ja elustiili.
                 </p>
               </div>
             </div>
@@ -71,7 +69,7 @@ export default function AboutPage() {
               src="/placeholder.svg?height=600&width=800"
               width={800}
               height={600}
-              alt="Салон красоты Beauty Style"
+              alt="Ilusalong Nakris Studio"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full"
             />
           </div>
@@ -82,9 +80,9 @@ export default function AboutPage() {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Наши преимущества</h2>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Meie eelised</h2>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Почему клиенты выбирают именно нас
+                Miks kliendid valivad just meid
               </p>
             </div>
           </div>
@@ -92,46 +90,46 @@ export default function AboutPage() {
             <Card>
               <CardContent className="p-6 flex flex-col items-center text-center">
                 <Scissors className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-bold mb-2">Профессионализм</h3>
+                <h3 className="text-xl font-bold mb-2">Professionaalsus</h3>
                 <p className="text-muted-foreground">
-                  Наши мастера — профессионалы с многолетним опытом работы и постоянным обучением
+                  Meie meistrid on pikaajalise kogemuse ja pideva täiendõppega professionaalid
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 flex flex-col items-center text-center">
                 <Award className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-bold mb-2">Качество</h3>
+                <h3 className="text-xl font-bold mb-2">Kvaliteet</h3>
                 <p className="text-muted-foreground">
-                  Мы используем только профессиональную косметику ведущих мировых брендов
+                  Kasutame ainult juhtivate maailmabrändide professionaalset kosmeetikat
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 flex flex-col items-center text-center">
                 <Clock className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-bold mb-2">Пунктуальность</h3>
-                <p className="text-muted-foreground">Мы ценим ваше время и всегда соблюдаем график записи</p>
+                <h3 className="text-xl font-bold mb-2">Täpsus</h3>
+                <p className="text-muted-foreground">Hindame teie aega ja peame alati kinni broneeringu graafikust</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 flex flex-col items-center text-center">
                 <Users className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-bold mb-2">Индивидуальный подход</h3>
-                <p className="text-muted-foreground">Мы учитываем все пожелания клиента и особенности его внешности</p>
+                <h3 className="text-xl font-bold mb-2">Individuaalne lähenemine</h3>
+                <p className="text-muted-foreground">Arvestame kliendi kõiki soove ja välimuse eripära</p>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      <section className="py-12 md:py-16 bg-muted">
+      {/* <section className="py-12 md:py-16 bg-muted">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Наши мастера</h2>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Meie meistrid</h2>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Профессионалы, которые создают красоту
+                Professionaalid, kes loovad ilu
               </p>
             </div>
           </div>
@@ -144,14 +142,14 @@ export default function AboutPage() {
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-1">{stylist.name}</h3>
                   <p className="text-primary mb-1">{stylist.position}</p>
-                  <p className="text-sm text-muted-foreground mb-3">Опыт работы: {stylist.experience}</p>
+                  <p className="text-sm text-muted-foreground mb-3">Töökogemus: {stylist.experience}</p>
                   <p className="text-muted-foreground text-sm">{stylist.description}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   )
 }
