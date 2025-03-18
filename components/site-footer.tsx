@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold">Beauty Style</span>
+              <span className="text-xl font-bold">Nakris Stuudio</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Ilusalong, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
@@ -37,12 +37,12 @@ export function SiteFooter() {
               <Link href="/services" className="text-muted-foreground hover:text-primary">
                 Teenused
               </Link>
-              <Link href="/booking" className="text-muted-foreground hover:text-primary">
+              <Link href="https://nakris-stuudio.salon.life" className="text-muted-foreground hover:text-primary">
                 Broneerimine
               </Link>
-              <Link href="/gallery" className="text-muted-foreground hover:text-primary">
+              {/* <Link href="/gallery" className="text-muted-foreground hover:text-primary">
                 Galerii
-              </Link>
+              </Link> */}
             </nav>
           </div>
           <div className="space-y-4">
@@ -61,7 +61,7 @@ export function SiteFooter() {
             <div className="flex flex-col space-y-2 text-sm">
               <div className="flex items-center text-muted-foreground">
                 <MapPin className="h-4 w-4 mr-2" />
-                <span>Tartu Puistee 128</span>
+                <span>Tartu Puiestee 128</span>
               </div>
               <div className="flex items-center text-muted-foreground">
                 <Phone className="h-4 w-4 mr-2" />
@@ -75,7 +75,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Nakris Studio. Kõik õigused kaitstud.</p>
+          <p>© {new Date().getFullYear()} Nakris Stuudio. Kõik õigused kaitstud.</p>
         </div>
       </div>
     </footer>

@@ -11,8 +11,8 @@ import { Toaster } from "@/components/toaster"
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  title: "Beauty Style - Салон красоты",
-  description: "Профессиональный салон красоты с широким спектром услуг",
+  title: "Nakris Stuudio",
+  description: "Laia valiku teenustega professionaalne ilusalong",
 }
 
 export default function RootLayout({

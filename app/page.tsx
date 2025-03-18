@@ -166,7 +166,7 @@ export default function HomePage() {
               </p>
             </div>
             <Button asChild size="lg" variant="secondary">
-              <Link href="/booking">
+              <Link href="https://nakris-stuudio.salon.life">
                 <CalendarDays className="mr-2 h-5 w-5" />
                 Broneeri online
               </Link>

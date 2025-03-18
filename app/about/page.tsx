@@ -51,7 +51,7 @@ export default function AboutPage() {
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Meist</h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  Ilusalong Nakris Studio on koht, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
+                  Ilusalong Nakris Stuudio on koht, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
                 </p>
               </div>
               <div className="space-y-2">
@@ -66,11 +66,12 @@ export default function AboutPage() {
               </div>
             </div>
             <Image
-              src="/placeholder.svg?height=600&width=800"
+              src="/salon-interior.jpg"
               width={800}
               height={600}
-              alt="Ilusalong Nakris Studio"
+              alt="Ilusalong Nakris Stuudio - Modernne ja elegantne salongi sisekujundus"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full"
+              priority
             />
           </div>
         </div>

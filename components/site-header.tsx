@@ -12,15 +12,15 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">Nakris Studio</span>
+            <span className="text-xl font-bold">Nakris Stuudio</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link href="/services" className="transition-colors hover:text-primary">
               Teenused
             </Link>
-            <Link href="/gallery" className="transition-colors hover:text-primary">
+            {/* <Link href="/gallery" className="transition-colors hover:text-primary">
               Galerii
-            </Link>
+            </Link> */}
             <Link href="/about" className="transition-colors hover:text-primary">
               Meist
             </Link>
@@ -32,7 +32,7 @@ export function SiteHeader() {
         <div className="flex items-center space-x-4">
           <AdminLink />
           <Button asChild size="sm" className="hidden md:inline-flex">
-            <Link href="/booking">Broneeri aeg</Link>
+            <Link href="https://nakris-stuudio.salon.life">Broneeri aeg</Link>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
