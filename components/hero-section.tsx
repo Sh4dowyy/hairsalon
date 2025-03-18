@@ -12,7 +12,7 @@ export function HeroSection() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Ilusalong <span className="text-primary">Nakris Stuudio</span>
+                Ilusalong <span className="text-primary">Na'Kris Stuudio</span>
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
                 Loome kordumatu välimuse, mis rõhutab teie individuaalsust. Meie meistrid aitavad teil igas olukorras täiuslik välja näha.
@@ -34,7 +34,7 @@ export function HeroSection() {
               src="/salon-interior.jpg"
               width={800}
               height={600}
-              alt="Ilusalong Nakris Stuudio - Modernne ja elegantne salongi sisekujundus"
+              alt="Ilusalong Na'Kris Stuudio - Modernne ja elegantne salongi sisekujundus"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full"
               priority
             />

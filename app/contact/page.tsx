@@ -85,7 +85,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold">Lahtiolekuajad</h3>
                     <p className="text-muted-foreground">E-R: 10:00 - 20:00</p>
-                    <p className="text-muted-foreground">L-P: 10:00 - 18:00</p>
+                    <p className="text-muted-foreground">L: 10:00 - 18:00</p>
+                    <p className="text-muted-foreground">P: Kokkuleppel</p>
                   </div>
                 </div>
               </CardContent>
@@ -99,7 +100,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold">Sotsiaalmeedia</h3>
                     <div className="flex space-x-4 mt-2">
-                      <a href="#" className="text-muted-foreground hover:text-primary">
+                      <a href="https://www.instagram.com/nakris_stuudio/" className="text-muted-foreground hover:text-primary">
                         <Instagram className="h-6 w-6" />
                         <span className="sr-only">Instagram</span>
                       </a>

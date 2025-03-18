@@ -18,7 +18,7 @@ export function MobileNav() {
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between py-4">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-xl font-bold">Nakris Stuudio</span>
+          <span className="text-xl font-bold">Na'Kris Stuudio</span>
         </Link>
       </div>
       <nav className="flex flex-col space-y-4 mt-8">

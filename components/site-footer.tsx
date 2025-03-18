@@ -8,13 +8,13 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold">Nakris Stuudio</span>
+              <span className="text-xl font-bold">Na'Kris Stuudio</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Ilusalong, kus iga klient saab individuaalse lähenemise ja kvaliteetse teeninduse.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary">
+              <a href="https://www.instagram.com/nakris_stuudio/" className="text-muted-foreground hover:text-primary">
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </a>
@@ -75,7 +75,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Nakris Stuudio. Kõik õigused kaitstud.</p>
+          <p>© {new Date().getFullYear()} Na'Kris Stuudio. Kõik õigused kaitstud.</p>
         </div>
       </div>
     </footer>

@@ -11,7 +11,7 @@ import { Toaster } from "@/components/toaster"
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  title: "Nakris Stuudio",
+  title: "Na'Kris Stuudio",
   description: "Laia valiku teenustega professionaalne ilusalong",
 }
 
