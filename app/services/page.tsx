@@ -27,6 +27,18 @@ export default function ServicesPage() {
         description: "Pidulik soeng erilisteks sündmusteks",
         price: "40-50€",
       },
+      {
+        id: 12,
+        name: "Ravi koos lõikusega",
+        description: "Professionaalne juuste ravi koos lõikusega",
+        price: "al. 55€",
+      },
+      {
+        id: 13,
+        name: "Ravi koos föönisoenguga",
+        description: "Professionaalne juuste ravi koos föönisoenguga",
+        price: "al. 35€",
+      },
     ],
     men: [
       { 
@@ -57,9 +69,9 @@ export default function ServicesPage() {
       },
       { 
         id: 9, 
-        name: "Kompleksteenus", 
+        name: "Komplektteenus", 
         description: "Värvimine koos lõikusega", 
-        price: "88-100€ + värvigramm 0,30€" 
+        price: "80-100€ + värvigramm 0,30€" 
       },
       {
         id: 10,
