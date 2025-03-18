@@ -12,7 +12,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">Nakris Stuudio</span>
+            <span className="text-xl font-bold">Na'Kris Stuudio</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link href="/services" className="transition-colors hover:text-primary">
