@@ -6,39 +6,21 @@ export default function AboutPage() {
   const stylists = [
     {
       id: 1,
-      name: "Anna Ivanova",
-      position: "Juuksur-kolorist",
-      experience: "8 aastat",
+      name: "Kristina",
+      position: "Juuksur-stilist",
+      experience: "20+ aastat",
       description:
-        "Spetsialist keerulistes värvitehnikates. Täiendab pidevalt oma oskusi rahvusvahelistel koolitustel.",
-      image: "/placeholder.svg?height=400&width=400",
+        "",
+      image: "/images/stylist1.jpg",
     },
     {
       id: 2,
-      name: "Maria Petrova",
+      name: "Natalja",
       position: "Juuksur-stilist",
-      experience: "6 aastat",
+      experience: "20+ aastat",
       description:
-        "Naiste ja meeste lõikuste meister. Loob individuaalse välimuse, arvestades kliendi soove ja välimuse eripära.",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      id: 3,
-      name: "Elena Sidorova",
-      position: "Universaalne meister",
-      experience: "10 aastat",
-      description:
-        "Kogenud meister, kes valdab kõiki lõikuse, värvimise ja soengu tegemise tehnikaid. Spetsialiseerub pruudisoengutel.",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      id: 4,
-      name: "Alexander Kozlov",
-      position: "Meestejuuksur",
-      experience: "5 aastat",
-      description:
-        "Spetsialist meeste lõikustes ja habemehoolduses. Valdab klassikalisi ja kaasaegseid tehnikaid.",
-      image: "/placeholder.svg?height=400&width=400",
+        "",
+      image: "/images/stylist2.jpg",
     },
   ]
 
@@ -56,8 +38,8 @@ export default function AboutPage() {
               </div>
               <div className="space-y-2">
                 <p className="text-muted-foreground">
-                  Meie salong asutati 2025. aastal ja selle aja jooksul oleme võitnud paljude klientide usalduse ja armastuse. 
-                  Täiendame pidevalt oma oskusi, jälgime ilu maailma viimaseid trende ja kasutame ainult juhtivate maailmabrändide professionaalset kosmeetikat.
+                  Me oleme võitnud paljude klientide usalduse ja armastuse. 
+                  Täiendame pidevalt oma oskusi, jälgime ilu maailma viimaseid trende ja kasutame professionaalset kosmeetikat.
                 </p>
                 <p className="text-muted-foreground">
                   Meie missioon on aidata igal kliendil rõhutada oma individuaalsust ja luua kordumatu välimus, 
@@ -124,7 +106,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* <section className="py-12 md:py-16 bg-muted">
+      <section className="py-12 md:py-16 bg-muted">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
             <div className="space-y-2">
@@ -134,11 +116,17 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto gap-8">
             {stylists.map((stylist) => (
               <Card key={stylist.id} className="overflow-hidden">
-                <div className="relative h-64">
-                  <Image src={stylist.image || "/placeholder.svg"} alt={stylist.name} fill className="object-cover" />
+                <div className="relative h-[400px]">
+                  <Image 
+                    src={stylist.image || "/placeholder.svg"} 
+                    alt={stylist.name} 
+                    fill 
+                    className="object-cover object-top" 
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-1">{stylist.name}</h3>
@@ -150,7 +138,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section> */}
+      </section>
     </main>
   )
 }
