@@ -51,7 +51,7 @@ export default function ContactPage() {
                   <MapPin className="h-6 w-6 text-primary flex-shrink-0" />
                   <div>
                     <h3 className="font-bold">Aadress</h3>
-                    <p className="text-muted-foreground">Tartu Puistee 128</p>
+                    <p className="text-muted-foreground">Tartu Puiestee 128</p>
                   </div>
                 </div>
               </CardContent>
@@ -84,7 +84,7 @@ export default function ContactPage() {
                   <Clock className="h-6 w-6 text-primary flex-shrink-0" />
                   <div>
                     <h3 className="font-bold">Lahtiolekuajad</h3>
-                    <p className="text-muted-foreground">E-R: 10:00 - 20:00</p>
+                    <p className="text-muted-foreground">E-R: 09:00 - 19:00</p>
                     <p className="text-muted-foreground">L: 10:00 - 18:00</p>
                     <p className="text-muted-foreground">P: Kokkuleppel</p>
                   </div>

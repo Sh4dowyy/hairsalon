@@ -13,31 +13,61 @@ export default function ServicesPage() {
         id: 1,
         name: "Naiste juukselõikus",
         description: "Professionaalne naiste juukselõikus vastavalt teie soovidele",
-        price: "40-50€",
+        price: "40€",
       },
       { 
         id: 2, 
         name: "Peapesu ja soeng", 
         description: "Peapesu ja lihtne soeng", 
-        price: "20-30€" 
+        price: "25€" 
       },
       {
         id: 3,
         name: "Pidulik soeng",
         description: "Pidulik soeng erilisteks sündmusteks",
-        price: "40-50€",
+        price: "50€",
       },
       {
         id: 12,
         name: "Ravi koos lõikusega",
         description: "Professionaalne juuste ravi koos lõikusega",
-        price: "al. 55€",
+        price: "55€",
       },
       {
         id: 13,
         name: "Ravi koos föönisoenguga",
         description: "Professionaalne juuste ravi koos föönisoenguga",
-        price: "al. 35€",
+        price: "35€",
+      },
+      { 
+        id: 16, 
+        name: "Jukselõikus isa + laps", 
+        description: "", 
+        price: "45€" 
+      },
+      { 
+        id: 17, 
+        name: "Jukselõikus ja intensiiv hooldus", 
+        description: "", 
+        price: "55€" 
+      },
+      {
+        id: 19,
+        name: "Juuste väljakasvu EXPRESS värvimine",
+        description: "Sisaldab hooldus",
+        price: "60€ + värvigramm 0,30€ ",
+      },
+      { 
+        id: 20, 
+        name: "Jukselõikus ja värvimie", 
+        description: "", 
+        price: "90€" 
+      },
+      { 
+        id: 21, 
+        name: "Juustepesu ja kuivatus naistele", 
+        description: "", 
+        price: "25€" 
       },
     ],
     men: [
@@ -59,33 +89,45 @@ export default function ServicesPage() {
         id: 7, 
         name: "Järelkasvu värvimine", 
         description: "Juuste järelkasvu värvimine", 
-        price: "al. 50€ + värvigramm 0,30€" 
+        price: "55€ + värvigramm 0,30€" 
       },
       { 
         id: 8, 
         name: "Värvimine", 
         description: "Juuste värvimine", 
-        price: "al. 65€ + värvigramm 0,30€" 
+        price: "65€ + värvigramm 0,30€" 
       },
       { 
         id: 9, 
         name: "Komplektteenus", 
         description: "Värvimine koos lõikusega", 
-        price: "80-100€ + värvigramm 0,30€" 
+        price: "90€ + värvigramm 0,30€" 
       },
       {
         id: 10,
         name: "Triibutamine",
-        description: "Salgutamine, erinevad tehnikad",
-        price: "100-150€ + materjal",
+        description: "Salgutamine",
+        price: "85€ + materjal",
       },
+      {
+        id: 18,
+        name: "Juukselõikus ja triibutamine",
+        description: "",
+        price: "100€ + materjal",
+      },
+      {
+        id: 14,
+        name: "Triibutamine koos lõikusega",
+        description: "Salgutamine",
+        price: "115€ + materjal",
+      },  
     ],
     children: [
       { 
         id: 11, 
         name: "Laste juukselõikus", 
         description: "Juukselõikus lastele", 
-        price: "20-25€" 
+        price: "20€" 
       },
     ],
   }
