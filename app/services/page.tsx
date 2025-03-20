@@ -28,12 +28,6 @@ export default function ServicesPage() {
         price: "50€",
       },
       {
-        id: 12,
-        name: "Ravi koos lõikusega",
-        description: "Professionaalne juuste ravi koos lõikusega",
-        price: "55€",
-      },
-      {
         id: 13,
         name: "Ravi koos föönisoenguga",
         description: "Professionaalne juuste ravi koos föönisoenguga",
@@ -47,7 +41,7 @@ export default function ServicesPage() {
       },
       { 
         id: 17, 
-        name: "Jukselõikus ja intensiiv hooldus", 
+        name: "Jukselõikus ja intensiivhooldus", 
         description: "", 
         price: "55€" 
       },
@@ -56,12 +50,6 @@ export default function ServicesPage() {
         name: "Juuste väljakasvu EXPRESS värvimine",
         description: "Sisaldab hooldus",
         price: "60€ + värvigramm 0,30€ ",
-      },
-      { 
-        id: 20, 
-        name: "Jukselõikus ja värvimie", 
-        description: "", 
-        price: "90€" 
       },
       { 
         id: 21, 

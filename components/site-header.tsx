@@ -1,10 +1,7 @@
 import Link from "next/link"
-import { Menu, Phone } from "lucide-react"
-
+import { Phone } from "lucide-react"
+import { MobileNav } from "./mobile-nav"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { MobileNav } from "@/components/mobile-nav"
-import { AdminLink } from "@/components/admin-link"
 
 export function SiteHeader() {
   return (
@@ -18,9 +15,6 @@ export function SiteHeader() {
             <Link href="/services" className="transition-colors hover:text-primary">
               Teenused
             </Link>
-            {/* <Link href="/gallery" className="transition-colors hover:text-primary">
-              Galerii
-            </Link> */}
             <Link href="/about" className="transition-colors hover:text-primary">
               Meist
             </Link>
@@ -30,24 +24,12 @@ export function SiteHeader() {
           </nav>
         </div>
         <div className="flex items-center space-x-4">
-          <AdminLink />
           <Button asChild size="sm" className="hidden md:inline-flex">
             <Link href="https://nakris-stuudio.salon.life">Broneeri aeg</Link>
           </Button>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Menüü</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <MobileNav />
-            </SheetContent>
-          </Sheet>
+          <MobileNav />
         </div>
       </div>
     </header>
   )
 }
-
