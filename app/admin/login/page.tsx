@@ -11,11 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 
-interface Employee {
-  id: number
-  email: string
-}
-
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -30,29 +25,27 @@ export default function AdminLoginPage() {
     try {
       const supabase = createClient()
       
-      // Query the employees table
-      const { data: employee, error } = await supabase
-        .from('employees')
-        .select('id, email, name')
-        .eq('email', email)
-        .eq('password', password)
-        .single()
+      // Use Supabase Auth to log in
+      const { data: { user }, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      })
 
       if (error) {
         throw error
       }
 
-      if (employee) {
-        // Store employee data (excluding password)
+      if (user) {
+        // Store user data
         localStorage.setItem('employee', JSON.stringify({
-          id: employee.id,
-          name: employee.name,
-          email: employee.email,
+          id: user.id,
+          email: user.email,
+          // You can add more user properties if needed
         }))
 
         toast({
           title: "Успешный вход",
-          description: `Добро пожаловать, ${employee.name}!`,
+          description: `Добро пожаловать, ${user.email}!`,
         })
 
         router.push("/")
