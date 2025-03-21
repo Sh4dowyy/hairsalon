@@ -21,13 +21,10 @@ interface Photo {
   order_index: number
 }
 
-interface AuthUser {
-  id: string
+interface Employee {
+  id: number
+  name: string
   email: string
-  role?: string
-  user_metadata?: {
-    role?: string
-  }
 }
 
 export default function GalleryPage() {
@@ -35,8 +32,7 @@ export default function GalleryPage() {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isUploading, setIsUploading] = useState(false)
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [employee, setEmployee] = useState<Employee | null>(null)
 
   const supabase = typeof window !== 'undefined' 
     ? createBrowserClient(
@@ -45,74 +41,16 @@ export default function GalleryPage() {
       )
     : null
 
-  // Separate effect for user authentication
   useEffect(() => {
-    if (!supabase) return
-
-    const checkUser = async () => {
-      try {
-        const { data: { user: sessionUser }, error: sessionError } = await supabase.auth.getUser()
-        
-        if (sessionError || !sessionUser) {
-          setUser(null)
-          setIsAuthorized(false)
-          return
-        }
-
-        const userData = {
-          id: sessionUser.id,
-          email: sessionUser.email || '',
-          role: sessionUser.user_metadata?.role,
-          user_metadata: sessionUser.user_metadata
-        }
-
-        setUser(userData)
-        
-        // Check authorization
-        const userRole = userData.role || userData.user_metadata?.role
-        const authorized = userRole === 'admin' || userRole === 'staff'
-        setIsAuthorized(authorized)
-      } catch (error) {
-        console.error('Error checking user:', error)
-        setUser(null)
-        setIsAuthorized(false)
-      }
+    // Check if employee is logged in
+    const storedEmployee = localStorage.getItem('employee')
+    if (storedEmployee) {
+      setEmployee(JSON.parse(storedEmployee))
     }
-
-    checkUser()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!session?.user) {
-        setUser(null)
-        setIsAuthorized(false)
-        return
-      }
-
-      const userData = {
-        id: session.user.id,
-        email: session.user.email || '',
-        role: session.user.user_metadata?.role,
-        user_metadata: session.user.user_metadata
-      }
-
-      setUser(userData)
-      
-      // Check authorization
-      const userRole = userData.role || userData.user_metadata?.role
-      const authorized = userRole === 'admin' || userRole === 'staff'
-      setIsAuthorized(authorized)
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [supabase])
-
-  // Separate effect for photos
-  useEffect(() => {
-    if (!supabase) return
 
     const fetchPhotos = async () => {
+      if (!supabase) return
+
       const { data, error } = await supabase
         .from('photos')
         .select('*')
@@ -136,10 +74,10 @@ export default function GalleryPage() {
   }, [supabase])
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!supabase || !user || !isAuthorized) {
+    if (!supabase || !employee) {
       toast({
         title: "Error",
-        description: "You are not authorized to upload photos",
+        description: "Only employees can upload photos",
         variant: "destructive",
       })
       return
@@ -259,10 +197,10 @@ export default function GalleryPage() {
   }
 
   const handleDelete = async (photo: Photo) => {
-    if (!supabase || !user || !isAuthorized) {
+    if (!supabase || !employee) {
       toast({
         title: "Error",
-        description: "You are not authorized to delete photos",
+        description: "Only employees can delete photos",
         variant: "destructive",
       })
       return
@@ -322,7 +260,7 @@ export default function GalleryPage() {
             </TabsList>
           </div>
 
-          {isAuthorized && (
+          {employee && (
             <div className="mb-8 max-w-2xl mx-auto">
               <div className="bg-muted/50 rounded-lg p-6 border border-border">
                 <div className="flex items-center gap-2 mb-4">
@@ -367,7 +305,7 @@ export default function GalleryPage() {
                         height={600}
                         className="object-cover w-full h-full transition-transform group-hover:scale-105"
                       />
-                      {isAuthorized && (
+                      {employee && (
                         <Button
                           variant="destructive"
                           size="icon"
@@ -393,7 +331,7 @@ export default function GalleryPage() {
                         height={600}
                         className="object-cover w-full h-full transition-transform group-hover:scale-105"
                       />
-                      {isAuthorized && (
+                      {employee && (
                         <Button
                           variant="destructive"
                           size="icon"
