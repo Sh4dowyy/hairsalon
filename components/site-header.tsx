@@ -15,6 +15,9 @@ export function SiteHeader() {
             <Link href="/services" className="transition-colors hover:text-primary">
               Teenused
             </Link>
+            <Link href="/gallery" className="transition-colors hover:text-primary">
+              Galerii
+            </Link>
             <Link href="/about" className="transition-colors hover:text-primary">
               Meist
             </Link>
