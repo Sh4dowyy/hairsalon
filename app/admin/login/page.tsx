@@ -1,24 +1,15 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Lock } from "lucide-react"
-
+import { createClient } from "@/utils/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
-
-// Mock employee credentials - in a real app, this would be in a database
-const EMPLOYEES = [
-  { id: 1, email: "anna@beautystyle.ru", password: "password1", name: "Анна Иванова" },
-  { id: 2, email: "maria@beautystyle.ru", password: "password2", name: "Мария Петрова" },
-  { id: 3, email: "elena@beautystyle.ru", password: "password3", name: "Елена Сидорова" },
-  { id: 4, email: "alex@beautystyle.ru", password: "password4", name: "Александр Козлов" },
-]
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("")
@@ -27,32 +18,37 @@ export default function AdminLoginPage() {
   const router = useRouter()
   const { toast } = useToast()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simple authentication logic
-    const employee = EMPLOYEES.find((emp) => emp.email === email && emp.password === password)
+    try {
+      const supabase = createClient()
+      
+      // Use Supabase Auth to log in
+      const { data: { user }, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      })
 
-    setTimeout(() => {
-      if (employee) {
-        // In a real app, you would set a secure HTTP-only cookie or use a token
-        // For this demo, we'll use localStorage
-        localStorage.setItem(
-          "employee",
-          JSON.stringify({
-            id: employee.id,
-            name: employee.name,
-            email: employee.email,
-          }),
-        )
+      if (error) {
+        throw error
+      }
+
+      if (user) {
+        // Store user data
+        localStorage.setItem('employee', JSON.stringify({
+          id: user.id,
+          email: user.email,
+          // You can add more user properties if needed
+        }))
 
         toast({
           title: "Успешный вход",
-          description: `Добро пожаловать, ${employee.name}!`,
+          description: `Добро пожаловать, ${user.email}!`,
         })
 
-        router.push("/admin/schedule")
+        router.push("/")
       } else {
         toast({
           title: "Ошибка входа",
@@ -60,8 +56,16 @@ export default function AdminLoginPage() {
           variant: "destructive",
         })
       }
+    } catch (error) {
+      console.error('Login error:', error)
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при входе. Попробуйте позже.",
+        variant: "destructive",
+      })
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (

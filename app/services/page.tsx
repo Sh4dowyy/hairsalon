@@ -1,128 +1,75 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createClient } from "@/utils/supabase/client"
+import { Button } from "@/components/ui/button"
+import { Edit } from "lucide-react"
+import Link from "next/link"
+
+interface Service {
+  id: number
+  name: string
+  description: string | null
+  price: string
+  category: string
+}
+
+interface Employee {
+  id: number
+  name: string
+  email: string
+}
 
 export default function ServicesPage() {
   const [category, setCategory] = useState("all")
+  const [services, setServices] = useState<Service[]>([])
+  const [loading, setLoading] = useState(true)
+  const [employee, setEmployee] = useState<Employee | null>(null)
 
-  const services = {
-    women: [
-      {
-        id: 1,
-        name: "Naiste juukselõikus",
-        description: "Professionaalne naiste juukselõikus vastavalt teie soovidele",
-        price: "40€",
-      },
-      { 
-        id: 2, 
-        name: "Peapesu ja soeng", 
-        description: "Peapesu ja lihtne soeng", 
-        price: "25€" 
-      },
-      {
-        id: 3,
-        name: "Pidulik soeng",
-        description: "Pidulik soeng erilisteks sündmusteks",
-        price: "50€",
-      },
-      {
-        id: 13,
-        name: "Ravi koos föönisoenguga",
-        description: "Professionaalne juuste ravi koos föönisoenguga",
-        price: "35€",
-      },
-      { 
-        id: 16, 
-        name: "Jukselõikus isa + laps", 
-        description: "", 
-        price: "45€" 
-      },
-      { 
-        id: 17, 
-        name: "Jukselõikus ja intensiivhooldus", 
-        description: "", 
-        price: "55€" 
-      },
-      {
-        id: 19,
-        name: "Juuste väljakasvu EXPRESS värvimine",
-        description: "Sisaldab hooldus",
-        price: "60€ + värvigramm 0,30€ ",
-      },
-      { 
-        id: 21, 
-        name: "Juustepesu ja kuivatus naistele", 
-        description: "", 
-        price: "25€" 
-      },
-    ],
-    men: [
-      { 
-        id: 4, 
-        name: "Meeste juukselõikus", 
-        description: "Klassikaline meeste juukselõikus", 
-        price: "30€" 
-      },
-      { 
-        id: 5, 
-        name: "Masinalõikus", 
-        description: "Kiire ja lihtne masinalõikus", 
-        price: "20€" 
-      },
-    ],
-    coloring: [
-      { 
-        id: 7, 
-        name: "Järelkasvu värvimine", 
-        description: "Juuste järelkasvu värvimine", 
-        price: "55€ + värvigramm 0,30€" 
-      },
-      { 
-        id: 8, 
-        name: "Värvimine", 
-        description: "Juuste värvimine", 
-        price: "65€ + värvigramm 0,30€" 
-      },
-      { 
-        id: 9, 
-        name: "Komplektteenus", 
-        description: "Värvimine koos lõikusega", 
-        price: "90€ + värvigramm 0,30€" 
-      },
-      {
-        id: 10,
-        name: "Triibutamine",
-        description: "Salgutamine",
-        price: "85€ + materjal",
-      },
-      {
-        id: 18,
-        name: "Juukselõikus ja triibutamine",
-        description: "",
-        price: "100€ + materjal",
-      },
-      {
-        id: 14,
-        name: "Triibutamine koos lõikusega",
-        description: "Salgutamine",
-        price: "115€ + materjal",
-      },  
-    ],
-    children: [
-      { 
-        id: 11, 
-        name: "Laste juukselõikus", 
-        description: "Juukselõikus lastele", 
-        price: "20€" 
-      },
-    ],
+  useEffect(() => {
+    // Check if employee is logged in
+    const storedEmployee = localStorage.getItem('employee')
+    if (storedEmployee) {
+      setEmployee(JSON.parse(storedEmployee))
+    }
+
+    const fetchServices = async () => {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+      
+      if (error) {
+        console.error('Error fetching services:', error)
+        return
+      }
+
+      if (data) {
+        setServices(data)
+      }
+      setLoading(false)
+    }
+
+    fetchServices()
+  }, [])
+
+  const displayServices = category === "all" 
+    ? services 
+    : services.filter(service => service.category === category)
+
+  if (loading) {
+    return (
+      <main className="flex flex-col min-h-screen py-12">
+        <div className="container px-4 md:px-6">
+          <div className="flex justify-center items-center h-[50vh]">
+            <p>Loading services...</p>
+          </div>
+        </div>
+      </main>
+    )
   }
-
-  const allServices = Object.values(services).flat()
-
-  const displayServices = category === "all" ? allServices : services[category as keyof typeof services]
 
   return (
     <main className="flex flex-col min-h-screen py-12">
@@ -134,6 +81,14 @@ export default function ServicesPage() {
               Täielik valik teenuseid teie täiusliku välimuse loomiseks
             </p>
           </div>
+          {employee && (
+            <Button asChild variant="outline" className="gap-2">
+              <Link href="/admin/services">
+                <Edit className="h-4 w-4" />
+                Muuda teenuseid
+              </Link>
+            </Button>
+          )}
         </div>
 
         <Tabs defaultValue="all" className="w-full" onValueChange={setCategory}>
