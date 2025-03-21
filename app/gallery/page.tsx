@@ -7,9 +7,8 @@ import { createBrowserClient } from "@supabase/ssr"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Trash2 } from "lucide-react"
+import { Trash2, Upload } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
-import { Upload } from "lucide-react"
 
 interface Photo {
   id: string
@@ -39,13 +38,17 @@ export default function GalleryPage() {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isAuthorized, setIsAuthorized] = useState(false)
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const supabase = typeof window !== 'undefined' 
+    ? createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+    : null
 
   // Separate effect for user authentication
   useEffect(() => {
+    if (!supabase) return
+
     const checkUser = async () => {
       try {
         const { data: { user: sessionUser }, error: sessionError } = await supabase.auth.getUser()
@@ -56,18 +59,11 @@ export default function GalleryPage() {
           return
         }
 
-        // Get the raw user metadata to ensure we have the complete data
-        const { data: { raw_user_meta_data }, error: metaError } = await supabase.rpc('get_user_metadata')
-        
-        if (metaError) {
-          console.error('Error fetching user metadata:', metaError)
-        }
-
         const userData = {
           id: sessionUser.id,
           email: sessionUser.email || '',
-          role: raw_user_meta_data?.role || sessionUser.user_metadata?.role,
-          user_metadata: raw_user_meta_data || sessionUser.user_metadata
+          role: sessionUser.user_metadata?.role,
+          user_metadata: sessionUser.user_metadata
         }
 
         setUser(userData)
@@ -76,11 +72,6 @@ export default function GalleryPage() {
         const userRole = userData.role || userData.user_metadata?.role
         const authorized = userRole === 'admin' || userRole === 'staff'
         setIsAuthorized(authorized)
-
-        console.log('User data:', {
-          ...userData,
-          isAuthorized: authorized
-        })
       } catch (error) {
         console.error('Error checking user:', error)
         setUser(null)
@@ -97,37 +88,19 @@ export default function GalleryPage() {
         return
       }
 
-      try {
-        // Get the raw user metadata to ensure we have the complete data
-        const { data: { raw_user_meta_data }, error: metaError } = await supabase.rpc('get_user_metadata')
-        
-        if (metaError) {
-          console.error('Error fetching user metadata:', metaError)
-        }
-
-        const userData = {
-          id: session.user.id,
-          email: session.user.email || '',
-          role: raw_user_meta_data?.role || session.user.user_metadata?.role,
-          user_metadata: raw_user_meta_data || session.user.user_metadata
-        }
-
-        setUser(userData)
-        
-        // Check authorization
-        const userRole = userData.role || userData.user_metadata?.role
-        const authorized = userRole === 'admin' || userRole === 'staff'
-        setIsAuthorized(authorized)
-
-        console.log('Auth state changed:', {
-          ...userData,
-          isAuthorized: authorized
-        })
-      } catch (error) {
-        console.error('Error in auth state change:', error)
-        setUser(null)
-        setIsAuthorized(false)
+      const userData = {
+        id: session.user.id,
+        email: session.user.email || '',
+        role: session.user.user_metadata?.role,
+        user_metadata: session.user.user_metadata
       }
+
+      setUser(userData)
+      
+      // Check authorization
+      const userRole = userData.role || userData.user_metadata?.role
+      const authorized = userRole === 'admin' || userRole === 'staff'
+      setIsAuthorized(authorized)
     })
 
     return () => {
@@ -137,6 +110,8 @@ export default function GalleryPage() {
 
   // Separate effect for photos
   useEffect(() => {
+    if (!supabase) return
+
     const fetchPhotos = async () => {
       const { data, error } = await supabase
         .from('photos')
@@ -161,7 +136,7 @@ export default function GalleryPage() {
   }, [supabase])
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!user || !isAuthorized) {
+    if (!supabase || !user || !isAuthorized) {
       toast({
         title: "Error",
         description: "You are not authorized to upload photos",
@@ -284,7 +259,7 @@ export default function GalleryPage() {
   }
 
   const handleDelete = async (photo: Photo) => {
-    if (!user || !isAuthorized) {
+    if (!supabase || !user || !isAuthorized) {
       toast({
         title: "Error",
         description: "You are not authorized to delete photos",
