@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, Phone } from "lucide-react"
+import { Menu, X } from "lucide-react"
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false)
@@ -28,57 +28,56 @@ export function MobileNav() {
 
       {/* Mobile Navigation Menu */}
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white shadow-lg z-50">
-          <nav className="flex flex-col space-y-4 p-4">
-            <Link
-              href="/"
-              className="text-lg font-medium hover:text-primary"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Avaleht
-            </Link>
-            <Link
-              href="/services"
-              className="text-lg font-medium hover:text-primary"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Teenused
-            </Link>
-            <Link
-              href="/gallery"
-              className="text-lg font-medium hover:text-primary"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Galerii
-            </Link>
-            <Link
-              href="/about"
-              className="text-lg font-medium hover:text-primary"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Meist
-            </Link>
-            <Link
-              href="/contact"
-              className="text-lg font-medium hover:text-primary"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Kontakt
-            </Link>
+        <div className="absolute top-16 left-0 right-0 bg-background border-b shadow-lg z-50">
+          <nav className="container py-4">
+            <ul className="space-y-4">
+              <li>
+                <Link
+                  href="/services"
+                  className="block px-4 py-2 hover:bg-accent rounded-md"
+                  onClick={closeMenu}
+                >
+                  Teenused
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/gallery"
+                  className="block px-4 py-2 hover:bg-accent rounded-md"
+                  onClick={closeMenu}
+                >
+                  Galerii
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="block px-4 py-2 hover:bg-accent rounded-md"
+                  onClick={closeMenu}
+                >
+                  Meist
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="block px-4 py-2 hover:bg-accent rounded-md"
+                  onClick={closeMenu}
+                >
+                  Kontakt
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://nakris-stuudio.salon.life"
+                  className="block px-4 py-2 hover:bg-accent rounded-md"
+                  onClick={closeMenu}
+                >
+                  Broneeri aeg
+                </Link>
+              </li>
+            </ul>
           </nav>
-          <div className="p-4 border-t">
-            <div className="flex items-center mb-4">
-              <Phone className="h-5 w-5 mr-2" />
-              <span>+372 5821 2260</span>
-            </div>
-            <Link
-              href="https://nakris-stuudio.salon.life"
-              className="block w-full text-center py-2 px-4 bg-primary text-white rounded-lg hover:bg-primary-dark"
-              onClick={closeMenu} // Close menu on link click
-            >
-              Broneeri online
-            </Link>
-          </div>
         </div>
       )}
     </div>
