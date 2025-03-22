@@ -104,14 +104,14 @@ export default function ContactPage() {
                         <Instagram className="h-6 w-6" />
                         <span className="sr-only">Instagram</span>
                       </a>
-                      <a href="#" className="text-muted-foreground hover:text-primary">
+                      {/* <a href="#" className="text-muted-foreground hover:text-primary">
                         <Facebook className="h-6 w-6" />
                         <span className="sr-only">Facebook</span>
                       </a>
                       <a href="#" className="text-muted-foreground hover:text-primary">
                         <Youtube className="h-6 w-6" />
                         <span className="sr-only">YouTube</span>
-                      </a>
+                      </a> */}
                     </div>
                   </div>
                 </div>

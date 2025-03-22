@@ -45,11 +45,11 @@ export function MobileNav() {
               Teenused
             </Link>
             <Link
-              href="https://nakris-stuudio.salon.life"
+              href="/gallery"
               className="text-lg font-medium hover:text-primary"
               onClick={closeMenu} // Close menu on link click
             >
-              Broneerimine
+              Galerii
             </Link>
             <Link
               href="/about"
