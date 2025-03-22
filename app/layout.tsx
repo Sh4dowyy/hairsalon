@@ -14,34 +14,19 @@ const inter = Inter({ subsets: ["latin", "cyrillic"] })
 export const metadata: Metadata = {
   title: "Na'Kris Stuudio",
   description: "Laia valiku teenustega professionaalne ilusalong",
-  metadataBase: new URL('https://nakrisstuudio.ee'),
   openGraph: {
     type: "website",
     locale: "et",
     url: "https://nakrisstuudio.ee",
     title: "Na'Kris Stuudio",
     description: "Laia valiku teenustega professionaalne ilusalong",
-    siteName: "Na'Kris Stuudio",
-    images: [
-      {
-        url: "/og-image.jpg", // We'll create this image
-        width: 1200,
-        height: 630,
-        alt: "Na'Kris Stuudio - Professionaalne ilusalong"
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Na'Kris Stuudio",
-    description: "Laia valiku teenustega professionaalne ilusalong",
-    images: ["/og-image.jpg"],
+    siteName: "Na'Kris Stuudio"
   },
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
-  manifest: "/manifest.json",
+  manifest: "/manifest.json"
 }
 
 export default function RootLayout({
