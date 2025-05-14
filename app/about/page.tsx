@@ -1,28 +1,241 @@
+"use client"
+
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
-import { Scissors, Award, Clock, Users } from "lucide-react"
+import { Scissors, Award, Clock, Users, Upload, Trash2 } from "lucide-react"
+import { useState, useEffect } from 'react'
+import { createBrowserClient } from "@supabase/ssr"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { toast } from "@/hooks/use-toast"
+
+interface Worker {
+  id: string
+  name: string
+  position: string
+  experience: string
+  description: string
+  image_path: string
+}
+
+interface Employee {
+  id: number
+  name: string
+  email: string
+}
 
 export default function AboutPage() {
-  const stylists = [
-    {
-      id: 1,
-      name: "Kristina",
-      position: "Juuksur-stilist",
-      experience: "20+ aastat",
-      description:
-        "",
-      image: "/images/stylist1.jpg",
-    },
-    {
-      id: 2,
-      name: "Natalja",
-      position: "Juuksur-stilist",
-      experience: "20+ aastat",
-      description:
-        "",
-      image: "/images/stylist2.jpg",
-    },
-  ]
+  const [workers, setWorkers] = useState<Worker[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
+  const [employee, setEmployee] = useState<Employee | null>(null)
+  
+  // Form states
+  const [name, setName] = useState('')
+  const [position, setPosition] = useState('')
+  const [experience, setExperience] = useState('')
+  const [description, setDescription] = useState('')
+  const [image, setImage] = useState<File | null>(null)
+
+  const supabase = typeof window !== 'undefined' 
+    ? createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+    : null
+
+  useEffect(() => {
+    const storedEmployee = localStorage.getItem('employee')
+    if (storedEmployee) {
+      setEmployee(JSON.parse(storedEmployee))
+    }
+
+    const fetchWorkers = async () => {
+      if (!supabase) return
+
+      const { data, error } = await supabase
+        .from('workers')
+        .select('*')
+
+      if (error) {
+        console.error('Error fetching workers:', error)
+        toast({
+          title: "Error",
+          description: "Failed to load workers",
+          variant: "destructive",
+        })
+        return
+      }
+
+      setWorkers(data || [])
+      setIsLoading(false)
+    }
+
+    fetchWorkers()
+  }, [supabase])
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: "Error",
+        description: "Please upload a valid image file (JPEG, PNG, GIF, or WEBP)",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      toast({
+        title: "Error",
+        description: "File size must be less than 5MB",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setImage(file)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!supabase || !employee || !image) {
+      toast({
+        title: "Error",
+        description: "Please fill all required fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsUploading(true)
+    try {
+      // Generate a unique filename
+      const timestamp = Date.now()
+      const randomString = Math.random().toString(36).substring(2, 10)
+      const fileExt = image.name.split('.').pop()?.toLowerCase() || 'jpg'
+      const fileName = `${timestamp}-${randomString}.${fileExt}`
+      const storagePath = `workers/${fileName}`
+
+      // Upload to Supabase Storage
+      const { error: uploadError, data: uploadData } = await supabase.storage
+        .from('salon-photos')
+        .upload(storagePath, image, {
+          cacheControl: '3600',
+          upsert: false
+        })
+
+      if (uploadError) {
+        throw new Error(`Upload error: ${uploadError.message}`)
+      }
+
+      if (!uploadData?.path) {
+        throw new Error('Upload failed: No path returned')
+      }
+
+      // Insert into workers table
+      const { error: dbError } = await supabase
+        .from('workers')
+        .insert({
+          name,
+          position,
+          experience,
+          description,
+          image_path: storagePath,
+        })
+
+      if (dbError) {
+        // If database insert fails, clean up the uploaded file
+        await supabase.storage
+          .from('salon-photos')
+          .remove([storagePath])
+        throw new Error(`Database error: ${dbError.message}`)
+      }
+
+      // Refresh workers
+      const { data: newWorkers, error: fetchError } = await supabase
+        .from('workers')
+        .select('*')
+        .order('created_at', { ascending: true })
+
+      if (fetchError) {
+        throw new Error(`Failed to refresh workers: ${fetchError.message}`)
+      }
+
+      setWorkers(newWorkers || [])
+      
+      // Reset form
+      setName('')
+      setPosition('')
+      setExperience('')
+      setDescription('')
+      setImage(null)
+      
+      toast({
+        title: "Success",
+        description: "Worker added successfully",
+      })
+    } catch (error) {
+      console.error('Error adding worker:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to add worker",
+        variant: "destructive",
+      })
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleDelete = async (worker: Worker) => {
+    if (!supabase || !employee) {
+      toast({
+        title: "Error",
+        description: "Only employees can delete workers",
+        variant: "destructive",
+      })
+      return
+    }
+
+    try {
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('salon-photos')
+        .remove([worker.image_path])
+
+      if (storageError) throw storageError
+
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('workers')
+        .delete()
+        .eq('id', worker.id)
+
+      if (dbError) throw dbError
+
+      // Update local state
+      setWorkers(workers.filter(w => w.id !== worker.id))
+      toast({
+        title: "Success",
+        description: "Worker deleted successfully",
+      })
+    } catch (error) {
+      console.error('Error deleting worker:', error)
+      toast({
+        title: "Error",
+        description: "Failed to delete worker",
+        variant: "destructive",
+      })
+    }
+  }
 
   return (
     <main className="flex flex-col min-h-screen">
@@ -116,27 +329,115 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto gap-8">
-            {stylists.map((stylist) => (
-              <Card key={stylist.id} className="overflow-hidden">
-                <div className="relative h-[400px]">
-                  <Image 
-                    src={stylist.image || "/placeholder.svg"} 
-                    alt={stylist.name} 
-                    fill 
-                    className="object-cover object-top" 
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
+
+          {employee && (
+            <div className="mb-8 max-w-2xl mx-auto">
+              <div className="bg-background/50 rounded-lg p-6 border border-border">
+                <div className="flex items-center gap-2 mb-4">
+                  <Upload className="h-5 w-5" />
+                  <Label htmlFor="worker-form" className="text-lg font-medium">Lisa uus töötaja</Label>
                 </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{stylist.name}</h3>
-                  <p className="text-primary mb-1">{stylist.position}</p>
-                  <p className="text-sm text-muted-foreground mb-3">Töökogemus: {stylist.experience}</p>
-                  <p className="text-muted-foreground text-sm">{stylist.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Nimi</Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="position">Ametikoht</Label>
+                    <Input
+                      id="position"
+                      value={position}
+                      onChange={(e) => setPosition(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="experience">Töökogemus</Label>
+                    <Input
+                      id="experience"
+                      value={experience}
+                      onChange={(e) => setExperience(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Kirjeldus</Label>
+                    <Textarea
+                      id="description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="min-h-[100px]"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="image">Foto</Label>
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      required
+                      className="bg-background file:bg-muted file:border-0 file:text-foreground file:hover:bg-muted/80 file:transition-colors file:px-4 file:py-2 file:mr-4 file:font-medium file:rounded-md cursor-pointer"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Lubatud formaadid: JPEG, PNG, GIF, WEBP. Maksimaalne suurus: 5MB
+                    </p>
+                  </div>
+                  <Button type="submit" disabled={isUploading} className="w-full">
+                    {isUploading ? 'Laadin üles...' : 'Lisa töötaja'}
+                  </Button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="text-center py-12">Laadin...</div>
+          ) : (
+            <div className="relative">
+              <div className="overflow-x-auto pb-6 pt-1">
+                <div className="flex space-x-8 min-w-full w-fit px-4">
+                  {workers.map((worker) => (
+                    <Card key={worker.id} className="flex-none w-[300px] overflow-hidden">
+                      <div className="relative h-[400px] group">
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/salon-photos/${worker.image_path}`}
+                          alt={worker.name}
+                          fill
+                          className="object-cover object-top"
+                          sizes="300px"
+                        />
+                        {employee && (
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleDelete(worker)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold mb-1">{worker.name}</h3>
+                        <p className="text-primary mb-1">{worker.position}</p>
+                        <p className="text-sm text-muted-foreground mb-3">Töökogemus: {worker.experience}</p>
+                        <p className="text-muted-foreground text-sm line-clamp-3">{worker.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              <div className="absolute left-0 top-0 bottom-6 w-8 bg-gradient-to-r from-muted to-transparent pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-6 w-8 bg-gradient-to-l from-muted to-transparent pointer-events-none" />
+            </div>
+          )}
         </div>
       </section>
     </main>
