@@ -237,14 +237,13 @@ export default function AboutPage() {
     }
   }
 
-  const formatContact = (desc) => {
-    // crude example, you can improve this
+  const formatContact = (desc: string) => {
     return desc
       .replace(/Instagram: ?@?([\w\.]+)/i, 'Instagram: $1')
       .replace(/Facebook: ?(.+?) E-mail:/i, 'Facebook: $1\nGmail:')
       .replace(/E-mail:/i, 'E-mail:')
       .split('\n')
-      .map((line, idx) => <p key={idx} className="text-muted-foreground text-sm">{line.trim()}</p>);
+      .map((line: string, idx: number) => <p key={idx} className="text-muted-foreground text-sm">{line.trim()}</p>);
   };
 
   return (
