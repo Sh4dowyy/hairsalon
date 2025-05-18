@@ -237,6 +237,16 @@ export default function AboutPage() {
     }
   }
 
+  const formatContact = (desc) => {
+    // crude example, you can improve this
+    return desc
+      .replace(/Instagram: ?@?([\w\.]+)/i, 'Instagram: $1')
+      .replace(/Facebook: ?(.+?) E-mail:/i, 'Facebook: $1\nGmail:')
+      .replace(/E-mail:/i, 'E-mail:')
+      .split('\n')
+      .map((line, idx) => <p key={idx} className="text-muted-foreground text-sm">{line.trim()}</p>);
+  };
+
   return (
     <main className="flex flex-col min-h-screen">
       <section className="py-12 md:py-16 bg-muted">
@@ -400,42 +410,39 @@ export default function AboutPage() {
             <div className="text-center py-12">Laadin...</div>
           ) : (
             <div className="relative">
-              <div className="overflow-x-auto pb-6 pt-1">
-                <div className="flex space-x-8 min-w-full w-fit px-4">
-                  {workers.map((worker) => (
-                    <Card key={worker.id} className="flex-none w-[300px] overflow-hidden">
-                      <div className="relative h-[400px] group">
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/salon-photos/${worker.image_path}`}
-                          alt={worker.name}
-                          fill
-                          className="object-cover object-top"
-                          sizes="300px"
-                        />
-                        {employee && (
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => handleDelete(worker)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                      <CardContent className="p-6">
-                        <h3 className="text-xl font-bold mb-1">{worker.name}</h3>
-                        <p className="text-primary mb-1">{worker.position}</p>
-                        <p className="text-sm text-muted-foreground mb-3">Töökogemus: {worker.experience}</p>
-                        <p className="text-muted-foreground text-sm line-clamp-3">{worker.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center mx-auto">
+                {workers.map((worker) => (
+                  <Card key={worker.id} className="w-[300px] overflow-hidden mx-auto">
+                    <div className="relative h-[400px] group">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/salon-photos/${worker.image_path}`}
+                        alt={worker.name}
+                        fill
+                        className="object-cover object-top"
+                        sizes="300px"
+                      />
+                      {employee && (
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => handleDelete(worker)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-bold mb-1">{worker.name}</h3>
+                      <p className="text-primary mb-1">{worker.position}</p>
+                      <p className="text-muted-foreground text-sm">
+                        Töökogemus: {worker.experience}
+                      </p>
+                      {worker.description && formatContact(worker.description)}
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-              <div className="absolute left-0 top-0 bottom-6 w-8 bg-gradient-to-r from-muted to-transparent pointer-events-none" />
-              <div className="absolute right-0 top-0 bottom-6 w-8 bg-gradient-to-l from-muted to-transparent pointer-events-none" />
             </div>
           )}
         </div>
