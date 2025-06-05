@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
-import { Scissors, Award, Clock, Users, Upload, Trash2 } from "lucide-react"
+import { Scissors, Award, Clock, Users, Upload, Trash2, Edit, ChevronUp, ChevronDown } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { createBrowserClient } from "@supabase/ssr"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,7 @@ interface Worker {
   experience: string
   description: string
   image_path: string
+  display_order: number
 }
 
 interface Employee {
@@ -38,6 +39,8 @@ export default function AboutPage() {
   const [experience, setExperience] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState<File | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editingWorker, setEditingWorker] = useState<Worker | null>(null)
 
   const supabase = typeof window !== 'undefined' 
     ? createBrowserClient(
@@ -58,6 +61,7 @@ export default function AboutPage() {
       const { data, error } = await supabase
         .from('workers')
         .select('*')
+        .order('display_order', { ascending: true })
 
       if (error) {
         console.error('Error fetching workers:', error)
@@ -150,6 +154,7 @@ export default function AboutPage() {
           experience,
           description,
           image_path: storagePath,
+          display_order: workers.length + 1,
         })
 
       if (dbError) {
@@ -164,7 +169,7 @@ export default function AboutPage() {
       const { data: newWorkers, error: fetchError } = await supabase
         .from('workers')
         .select('*')
-        .order('created_at', { ascending: true })
+        .order('display_order', { ascending: true })
 
       if (fetchError) {
         throw new Error(`Failed to refresh workers: ${fetchError.message}`)
@@ -232,6 +237,198 @@ export default function AboutPage() {
       toast({
         title: "Error",
         description: "Failed to delete worker",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleEdit = (worker: Worker) => {
+    setIsEditing(true)
+    setEditingWorker(worker)
+    setName(worker.name)
+    setPosition(worker.position)
+    setExperience(worker.experience)
+    setDescription(worker.description)
+    setImage(null)
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setEditingWorker(null)
+    setName('')
+    setPosition('')
+    setExperience('')
+    setDescription('')
+    setImage(null)
+  }
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!supabase || !employee || !editingWorker) {
+      toast({
+        title: "Error",
+        description: "Missing required data for update",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsUploading(true)
+    try {
+      let imagePath = editingWorker.image_path
+
+      // If new image is uploaded, handle image update
+      if (image) {
+        // Delete old image
+        await supabase.storage
+          .from('salon-photos')
+          .remove([editingWorker.image_path])
+
+        // Upload new image
+        const timestamp = Date.now()
+        const randomString = Math.random().toString(36).substring(2, 10)
+        const fileExt = image.name.split('.').pop()?.toLowerCase() || 'jpg'
+        const fileName = `${timestamp}-${randomString}.${fileExt}`
+        const storagePath = `workers/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('salon-photos')
+          .upload(storagePath, image, {
+            cacheControl: '3600',
+            upsert: false
+          })
+
+        if (uploadError) {
+          throw new Error(`Upload error: ${uploadError.message}`)
+        }
+
+        imagePath = storagePath
+      }
+
+      // Update worker in database
+      const { error: dbError } = await supabase
+        .from('workers')
+        .update({
+          name,
+          position,
+          experience,
+          description,
+          image_path: imagePath,
+        })
+        .eq('id', editingWorker.id)
+
+      if (dbError) {
+        throw new Error(`Database error: ${dbError.message}`)
+      }
+
+      // Refresh workers
+      const { data: newWorkers, error: fetchError } = await supabase
+        .from('workers')
+        .select('*')
+        .order('display_order', { ascending: true })
+
+      if (fetchError) {
+        throw new Error(`Failed to refresh workers: ${fetchError.message}`)
+      }
+
+      setWorkers(newWorkers || [])
+      handleCancelEdit()
+      
+      toast({
+        title: "Success",
+        description: "Worker updated successfully",
+      })
+    } catch (error) {
+      console.error('Error updating worker:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to update worker",
+        variant: "destructive",
+      })
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleMoveUp = async (worker: Worker) => {
+    if (!supabase || !employee) return
+
+    const currentIndex = workers.findIndex(w => w.id === worker.id)
+    if (currentIndex <= 0) return // Already at top
+
+    const workerAbove = workers[currentIndex - 1]
+    
+    try {
+      // Swap display_order values
+      await supabase
+        .from('workers')
+        .update({ display_order: workerAbove.display_order })
+        .eq('id', worker.id)
+
+      await supabase
+        .from('workers')
+        .update({ display_order: worker.display_order })
+        .eq('id', workerAbove.id)
+
+      // Refresh workers
+      const { data: newWorkers } = await supabase
+        .from('workers')
+        .select('*')
+        .order('display_order', { ascending: true })
+
+      setWorkers(newWorkers || [])
+      
+      toast({
+        title: "Success",
+        description: "Worker moved up successfully",
+      })
+    } catch (error) {
+      console.error('Error moving worker up:', error)
+      toast({
+        title: "Error",
+        description: "Failed to move worker",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const handleMoveDown = async (worker: Worker) => {
+    if (!supabase || !employee) return
+
+    const currentIndex = workers.findIndex(w => w.id === worker.id)
+    if (currentIndex >= workers.length - 1) return // Already at bottom
+
+    const workerBelow = workers[currentIndex + 1]
+    
+    try {
+      // Swap display_order values
+      await supabase
+        .from('workers')
+        .update({ display_order: workerBelow.display_order })
+        .eq('id', worker.id)
+
+      await supabase
+        .from('workers')
+        .update({ display_order: worker.display_order })
+        .eq('id', workerBelow.id)
+
+      // Refresh workers
+      const { data: newWorkers } = await supabase
+        .from('workers')
+        .select('*')
+        .order('display_order', { ascending: true })
+
+      setWorkers(newWorkers || [])
+      
+      toast({
+        title: "Success",
+        description: "Worker moved down successfully",
+      })
+    } catch (error) {
+      console.error('Error moving worker down:', error)
+      toast({
+        title: "Error",
+        description: "Failed to move worker",
         variant: "destructive",
       })
     }
@@ -344,9 +541,11 @@ export default function AboutPage() {
               <div className="bg-background/50 rounded-lg p-6 border border-border">
                 <div className="flex items-center gap-2 mb-4">
                   <Upload className="h-5 w-5" />
-                  <Label htmlFor="worker-form" className="text-lg font-medium">Lisa uus töötaja</Label>
+                  <Label htmlFor="worker-form" className="text-lg font-medium">
+                    {isEditing ? 'Muuda töötajat' : 'Lisa uus töötaja'}
+                  </Label>
                 </div>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={isEditing ? handleUpdate : handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nimi</Label>
                     <Input
@@ -390,16 +589,24 @@ export default function AboutPage() {
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
-                      required
+                      required={!isEditing}
                       className="bg-background file:bg-muted file:border-0 file:text-foreground file:hover:bg-muted/80 file:transition-colors file:px-4 file:py-2 file:mr-4 file:font-medium file:rounded-md cursor-pointer"
                     />
                     <p className="text-sm text-muted-foreground">
                       Lubatud formaadid: JPEG, PNG, GIF, WEBP. Maksimaalne suurus: 5MB
+                      {isEditing && " (Jäta tühjaks, kui ei soovi pilti muuta)"}
                     </p>
                   </div>
-                  <Button type="submit" disabled={isUploading} className="w-full">
-                    {isUploading ? 'Laadin üles...' : 'Lisa töötaja'}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button type="submit" disabled={isUploading} className="flex-1">
+                      {isUploading ? 'Laadin üles...' : (isEditing ? 'Uuenda töötajat' : 'Lisa töötaja')}
+                    </Button>
+                    {isEditing && (
+                      <Button type="button" variant="outline" onClick={handleCancelEdit}>
+                        Tühista
+                      </Button>
+                    )}
+                  </div>
                 </form>
               </div>
             </div>
@@ -421,14 +628,42 @@ export default function AboutPage() {
                         sizes="300px"
                       />
                       {employee && (
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={() => handleDelete(worker)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleMoveUp(worker)}
+                            disabled={workers.findIndex(w => w.id === worker.id) === 0}
+                            className="h-8 w-8"
+                          >
+                            <ChevronUp className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleMoveDown(worker)}
+                            disabled={workers.findIndex(w => w.id === worker.id) === workers.length - 1}
+                            className="h-8 w-8"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            size="icon"
+                            onClick={() => handleEdit(worker)}
+                            className="h-8 w-8"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => handleDelete(worker)}
+                            className="h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       )}
                     </div>
                     <CardContent className="p-6">
